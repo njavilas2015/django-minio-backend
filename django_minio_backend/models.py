@@ -174,7 +174,7 @@ class MinioBackend(Storage):
             return obj.size
         return 0
 
-    def url(self, name: str):
+    def url(self, name: str, days=7, hours=0, minutes=0):
         """
         Returns url to object.
         If bucket is public, direct link is provided.
@@ -189,7 +189,7 @@ class MinioBackend(Storage):
             return self.client.presigned_get_object(
                 bucket_name=self._BUCKET_NAME,
                 object_name=name.encode('utf-8'),
-                expires=get_setting("MINIO_URL_EXPIRY_HOURS", timedelta(days=7))  # Default is 7 days
+                expires=get_setting("MINIO_URL_EXPIRY_HOURS", timedelta(days=days, hours=hours, minutes=minutes))  # Default is 7 days
             )
         except urllib3.exceptions.MaxRetryError:
             raise ConnectionError("Couldn't connect to Minio. Check django_minio_backend parameters in Django-Settings")
