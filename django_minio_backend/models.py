@@ -163,8 +163,8 @@ class MinioBackend(Storage):
             return True
         return False
 
-    def listdir(self, bucket_name: str):
-        objects = self.client.list_objects(bucket_name=bucket_name, recursive=True)
+    def listdir(self, bucket_name: str, prefix=None):
+        objects = self.client.list_objects(bucket_name=bucket_name, recursive=True, prefix=prefix)
         return [(obj.object_name, obj) for obj in objects]
 
     def size(self, name: str) -> int:
